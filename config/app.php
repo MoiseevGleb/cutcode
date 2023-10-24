@@ -169,6 +169,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
+
+        App\Providers\TestingServiceProvider::class,
+        App\Providers\ViewServiceProvider::class,
+
     ])->toArray(),
 
     /*

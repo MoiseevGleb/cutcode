@@ -9,30 +9,40 @@ trait HasSlug
     protected static function bootHasSlug(): void
     {
         static::creating(function (Model $model) {
-            $model->slug = self::getSlug($model);
+            $model->makeSlug();
         });
     }
 
-    public static function getSlug(Model $model): string
+    protected function makeSlug(): void
     {
-        if ($model->slug) {
-            return $model->slug;
+        if ($this->slug) {
+            return;
         }
 
-        $defaultSlug = str($model->{self::slugFrom()})->slug();
-
-        $equalSlugCounter = 0;
+        $defaultSlug = str($this->{self::slugFrom()})->slug();
         $slug = $defaultSlug;
 
-        while ($model::query()->where('slug', 'like', $slug)->exists()) {
+        $equalSlugCounter = 0;
+
+        while ($this->slugExists($slug))
+        {
             $equalSlugCounter++;
-            $slug = "{$defaultSlug}-{$equalSlugCounter}";
+            $slug = "$defaultSlug-$equalSlugCounter";
         }
 
-        return $slug;
+        $this->slug = $slug;
     }
 
-    public static function slugFrom(): string
+    private function slugExists(string $slug): bool
+    {
+        return $this->query()
+            ->where('slug', 'like', $slug)
+            ->where($this->getKeyName(), '!=', $this->getKey())
+            ->withoutGlobalScopes()
+            ->exists();
+    }
+
+    protected static function slugFrom(): string
     {
         return 'title';
     }

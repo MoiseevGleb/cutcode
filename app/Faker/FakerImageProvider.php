@@ -4,23 +4,17 @@ namespace App\Faker;
 
 use Faker\Provider\Base;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class FakerImageProvider extends Base
 {
-    public function fakeImage(string $from, string $to): string
+    public function fixturesImage(string $from, string $to): string
     {
-        if (! Storage::directoryExists($to)) {
+        if (Storage::directoryMissing($to)) {
             Storage::makeDirectory($to);
         }
 
-        $fromImages = glob($from . '\*.jpg');
-        $randomFile = $fromImages[rand(0, count($fromImages) - 1)];
+        $file = $this->generator->file(base_path("tests/Fixtures/images/$from"), Storage::path($to));
 
-        $newName = storage_path("app/public/{$to}/" . Str::random(10) . '.jpg');
-
-        copy($randomFile, $newName);
-
-        return basename($newName);
+        return basename($file);
     }
 }

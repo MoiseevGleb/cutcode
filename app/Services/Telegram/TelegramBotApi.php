@@ -11,9 +11,6 @@ class TelegramBotApi
 {
     public const HOST = "https://api.telegram.org/bot";
 
-    /**
-     * @throws Exception
-     */
     public static function sendMessage(string $chatId, string $token, string $text): bool
     {
         try {
