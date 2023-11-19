@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
+use Domain\Catalog\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,15 +10,25 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CategoryFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Category::class;
+
     public function definition(): array
     {
         return [
+            'on_home_page' => $this->faker->boolean(),
+
+            'sorting' => $this->faker->numberBetween(1, 999),
+
             'title' => ucfirst($this->faker->words(2, true)),
         ];
+    }
+
+    public function onHomePage(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'on_home_page' => true,
+            ];
+        });
     }
 }

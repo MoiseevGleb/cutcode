@@ -3,18 +3,25 @@
 namespace App\Providers;
 
 use App\Listeners\SendEmailToNewUserListener;
+use Domain\Catalog\Models\Brand;
+use Domain\Catalog\Models\Category;
+use Domain\Catalog\Observers\BrandObserver;
+use Domain\Catalog\Observers\CategoryObserver;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
-    /**
-     * The event to listener mappings for the application.
-     *
-     * @var array<class-string, array<int, class-string>>
-     */
+    protected $observers = [
+        Category::class => [
+            CategoryObserver::class
+        ],
+
+        Brand::class => [
+            BrandObserver::class
+        ],
+    ];
+
     protected $listen = [
         Registered::class => [
             SendEmailToNewUserListener::class,
@@ -22,17 +29,11 @@ class EventServiceProvider extends ServiceProvider
         ],
     ];
 
-    /**
-     * Register any events for your application.
-     */
     public function boot(): void
     {
         //
     }
 
-    /**
-     * Determine if events and listeners should be automatically discovered.
-     */
     public function shouldDiscoverEvents(): bool
     {
         return false;

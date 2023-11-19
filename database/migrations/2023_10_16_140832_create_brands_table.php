@@ -10,6 +10,10 @@ return new class extends Migration {
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
 
+            $table->boolean('on_home_page')->default(false);
+
+            $table->integer('sorting')->default(999);
+
             $table->string('slug')->unique();
 
             $table->string('title');
