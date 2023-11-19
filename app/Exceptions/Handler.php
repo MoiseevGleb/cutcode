@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use DomainException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -21,11 +22,17 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
-    public function register() {
+    public function register(): void
+    {
         $this->reportable(function (Throwable $e) {
             if (app()->bound('sentry')) {
                 app('sentry')->captureException($e);
             }
+        });
+
+        $this->renderable(function (DomainException $exception) {
+            flash()->alert($exception->getMessage());
+            return back();
         });
     }
 }

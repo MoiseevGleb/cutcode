@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class RefreshCommand extends Command
@@ -23,6 +24,8 @@ class RefreshCommand extends Command
         $this->call('migrate:fresh', [
             '--seed' => true,
         ]);
+
+        $this->call('cache:clear');
 
         return self::SUCCESS;
     }
