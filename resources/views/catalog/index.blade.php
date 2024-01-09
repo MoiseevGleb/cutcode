@@ -109,7 +109,7 @@
 
                 <!-- Products list -->
                 <div class="products grid @if(is_catalog_view('list')) grid-cols-1 gap-y-8 @else grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 2xl:gap-x-8 gap-y-8 lg:gap-y-10 2xl:gap-y-12 @endif">
-                    @each('product.shared.product' . (is_catalog_view('list') ? '-list' : ''), $products, 'item')
+                    @each('catalog.shared.product' . (is_catalog_view('list') ? '-list' : ''), $products, 'item')
                 </div>
 
                 <!-- Page pagination -->

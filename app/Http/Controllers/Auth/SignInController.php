@@ -8,6 +8,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Support\SessionRegenarator;
 
 class SignInController extends Controller
 {
@@ -24,17 +25,16 @@ class SignInController extends Controller
             ])->onlyInput('email');
         }
 
-        session()->regenerate();
+        SessionRegenarator::run();
 
         return redirect()->intended(route('home'));
     }
 
     public function logout(): RedirectResponse
     {
-        auth()->logout();
-
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
+        SessionRegenarator::run(function () {
+            auth()->logout();
+        });
 
         return redirect()->route('signIn');
     }

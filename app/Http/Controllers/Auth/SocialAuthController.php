@@ -7,6 +7,7 @@ use Domain\Auth\Models\User;
 use DomainException;
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Facades\Socialite;
+use Support\SessionRegenarator;
 use Throwable;
 
 class SocialAuthController extends Controller
@@ -36,8 +37,7 @@ class SocialAuthController extends Controller
             'password' => bcrypt(str()->random(20)),
         ]);
 
-
-        auth()->login($user);
+        SessionRegenarator::run(fn() => auth()->login($user));
 
         return redirect()->intended(route('home'));
     }

@@ -31,7 +31,7 @@ class PriceTest extends TestCase
     public function it_throws_invalid_price_exception()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Price must be more than zero');
+        $this->expectExceptionMessage('Price can not be less than zero');
 
         Price::make(0);
     }
